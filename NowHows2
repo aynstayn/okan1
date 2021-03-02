@@ -1,0 +1,58 @@
+package com.example.sql;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    EditText adi, vize, finali,id;
+    Button ekle,sil,goster;
+    Intent intent;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_main );
+        adi = findViewById( R.id.txtAd );
+        vize=findViewById( R.id.txtVize );
+        finali=findViewById( R.id.txtFinal );
+        ekle=findViewById( R.id.btnEkle );
+        goster=findViewById( R.id.btnListele );
+        sil=findViewById( R.id.btnSil );
+        id=findViewById( R.id.txtId );
+
+        ekle.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String oAdi = adi.getText().toString();
+                int oVize = Integer.parseInt(vize.getText().toString());
+                int oFinal = Integer.parseInt(finali.getText().toString());
+                int basarinotu = (int) (oVize*0.4+oFinal*0.6);
+                database database = new database(MainActivity.this);
+                database.insertOgrenci(oAdi,oVize,oFinal,basarinotu);
+                Toast.makeText(getApplicationContext(), "Kayıtlar Başarıyla Eklendi",Toast.LENGTH_SHORT).show();
+            }
+        } );
+        goster.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this,Detaylar.class);
+                startActivity(intent);
+            }
+        } );
+        sil.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int Id = Integer.parseInt(id.getText().toString());
+                database database = new database(MainActivity.this);
+                database.DeleteOgrenci( Id );
+                Toast.makeText(getApplicationContext(), "Seçili kayıt silinmiştir.",Toast.LENGTH_SHORT).show();
+            }
+        } );
+
+    }
+}
